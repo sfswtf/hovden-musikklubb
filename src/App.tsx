@@ -307,7 +307,12 @@ function EventsPage() {
                       </div>
                       <div className="p-6 flex-grow flex flex-col">
                         <h3 className="text-xl font-bold mb-2">Hovden Musikkfest</h3>
-                        <p className="text-gray-600 mb-4">Klikk for å se festivalprogrammet for oktober.</p>
+                        <p className="text-gray-600 mb-2">Klikk for å se festivalprogrammet</p>
+                        <ul className="text-gray-700 list-disc list-inside space-y-1">
+                          <li>Yngve Jordalen</li>
+                          <li>Valkyrien Allstars</li>
+                          <li>Center of the Universe</li>
+                        </ul>
                       </div>
                     </Link>
                     {/* Show Grendedag as a normal event card in October */}
