@@ -137,7 +137,7 @@ function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <ParallaxHero imageUrl="/images/hero-background.jpg">
+      <ParallaxHero imageUrl="/images/hero-background.png">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-start items-center pt-20 pb-8">
           <AnimatedLogo
             src="/images/logo.jpg"
@@ -256,7 +256,6 @@ function EventsPage() {
     const date = new Date(event.event_date);
     const monthKey = date.toLocaleString('no-NO', {
       timeZone: 'Europe/Oslo',
-      year: 'numeric',
       month: 'long'
     });
     
@@ -288,10 +287,10 @@ function EventsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold mb-8">Kommende Arrangementer</h1>
+      <h1 className="text-3xl font-bold mb-8">Program 2025</h1>
       {events.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
-          Ingen kommende arrangementer for øyeblikket.
+          Ingen arrangementer planlagt for øyeblikket.
         </div>
       ) : (
         <div className="space-y-12">

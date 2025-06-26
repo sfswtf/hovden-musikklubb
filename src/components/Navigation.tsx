@@ -19,16 +19,16 @@ export function Navigation() {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               <Link to="/events" className="text-[#f2e1c5] hover:text-white px-3 py-2 rounded-md">
-                Arrangementer
+                Program 2025
+              </Link>
+              <Link to="/membership" className="text-[#f2e1c5] hover:text-white px-3 py-2 rounded-md">
+                Bli Medlem
               </Link>
               <Link to="/musikkfest" className="text-[#f2e1c5] hover:text-white px-3 py-2 rounded-md">
                 Musikkfest
               </Link>
               <Link to="/about" className="text-[#f2e1c5] hover:text-white px-3 py-2 rounded-md">
                 Om Oss
-              </Link>
-              <Link to="/membership" className="text-[#f2e1c5] hover:text-white px-3 py-2 rounded-md">
-                Medlemskap
               </Link>
               <Link to="/gallery" className="text-[#f2e1c5] hover:text-white px-3 py-2 rounded-md">
                 Galleri
@@ -60,7 +60,14 @@ export function Navigation() {
               className="text-[#f2e1c5] hover:text-white block px-3 py-2 rounded-md"
               onClick={() => setIsOpen(false)}
             >
-              Arrangementer
+              Program 2025
+            </Link>
+            <Link
+              to="/membership"
+              className="text-[#f2e1c5] hover:text-white block px-3 py-2 rounded-md"
+              onClick={() => setIsOpen(false)}
+            >
+              Bli Medlem
             </Link>
             <Link
               to="/musikkfest"
@@ -75,13 +82,6 @@ export function Navigation() {
               onClick={() => setIsOpen(false)}
             >
               Om Oss
-            </Link>
-            <Link
-              to="/membership"
-              className="text-[#f2e1c5] hover:text-white block px-3 py-2 rounded-md"
-              onClick={() => setIsOpen(false)}
-            >
-              Medlemskap
             </Link>
             <Link
               to="/gallery"
