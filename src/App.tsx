@@ -152,7 +152,7 @@ function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-4xl mx-auto">
               <Link to="/events" className="w-full transform transition-transform hover:scale-105">
                 <AnimatedButton variant="primary" className="w-full min-h-[80px] flex items-center justify-center text-center px-6 py-4 text-lg sm:text-xl leading-snug bg-[#1d4f4d] hover:bg-[#2a6f6d]">
-                  <span className="block w-full max-w-xs mx-auto">Kommende<br className="hidden sm:block" /> Arrangementer</span>
+                  <span className="block w-full max-w-xs mx-auto">Program<br className="hidden sm:block" /> 2025</span>
                 </AnimatedButton>
               </Link>
               <Link to="/musikkfest" className="w-full transform transition-transform hover:scale-105">
