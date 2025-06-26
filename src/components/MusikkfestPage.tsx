@@ -69,7 +69,7 @@ export function MusikkfestPage() {
           <div className="text-center py-12 text-gray-500">Ingen programinnslag funnet.</div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-            {events.map(event => (
+            {events.filter(event => event.title !== 'Grendedag').map(event => (
               <AnimatedCard key={event.id} onClick={() => setSelectedEvent(event)} className="cursor-pointer">
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full p-0">
                   {event.image_url && (

@@ -284,6 +284,8 @@ function EventsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Program 2025 Banner Image */}
+      <img src="/images/program2025.png" alt="Program 2025" className="w-full max-w-4xl mx-auto rounded-lg mb-8 object-cover" style={{height: 'auto'}} />
       <h1 className="text-3xl font-bold mb-8">Program 2025</h1>
       {events.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
@@ -298,16 +300,56 @@ function EventsPage() {
               </h2>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {month === 'oktober' ? (
-                  <Link to="/musikkfest" className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col">
-                    <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
-                      <img className="w-full h-48 object-contain" src="/images/logo.jpg" alt="Hovden Musikkfest" />
-                    </div>
-                    <div className="p-6 flex-grow flex flex-col">
-                      <h3 className="text-xl font-bold mb-2">Hovden Musikkfest</h3>
-                      <p className="text-gray-600 mb-4">Klikk for å se festivalprogrammet for oktober.</p>
-                    </div>
-                  </Link>
-                ) : (
+                  <>
+                    <Link to="/musikkfest" className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col">
+                      <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
+                        <img className="w-full h-48 object-contain" src="/images/logo.jpg" alt="Hovden Musikkfest" />
+                      </div>
+                      <div className="p-6 flex-grow flex flex-col">
+                        <h3 className="text-xl font-bold mb-2">Hovden Musikkfest</h3>
+                        <p className="text-gray-600 mb-4">Klikk for å se festivalprogrammet for oktober.</p>
+                      </div>
+                    </Link>
+                    {/* Show Grendedag as a normal event card in October */}
+                    {eventsByMonth[month].filter(event => event.title === 'Grendedag').map(event => (
+                      <div
+                        key={event.id}
+                        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
+                        onClick={() => setSelectedEvent(event)}
+                      >
+                        {event.image_url && (
+                          <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
+                            <img
+                              className="w-full h-48 object-contain"
+                              src={event.image_url}
+                              alt={event.title}
+                            />
+                          </div>
+                        )}
+                        <div className="p-6 flex-grow flex flex-col">
+                          <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                          <p className="text-gray-600 mb-4">
+                            {new Date(event.event_date).toLocaleString('no-NO', {
+                              timeZone: 'Europe/Oslo',
+                              weekday: 'long',
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                          <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
+                          {event.location && (
+                            <p className="text-gray-600 mt-auto">
+                              <span className="font-semibold">Sted:</span> {event.location}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                ) :
                   eventsByMonth[month].map(event => (
                     <div
                       key={event.id}
@@ -345,13 +387,12 @@ function EventsPage() {
                       </div>
                     </div>
                   ))
-                )}
+                }
               </div>
             </div>
           ))}
         </div>
       )}
-      
       {selectedEvent && (
         <EventModal
           event={selectedEvent}
