@@ -145,9 +145,6 @@ function HomePage() {
             className="w-[20rem] sm:w-[28rem] md:w-[32rem] h-auto mb-8 rounded-full shadow-lg border-4 border-[#f2e1c5]"
           />
           <div className="text-center mx-auto max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Hovden Musikklubb
-            </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed">
               Der fjellånden møter musikksjelen.<br />
               Bli med oss på intime konserter i vårt unike lokale.
@@ -300,43 +297,55 @@ function EventsPage() {
                 {month}
               </h2>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {eventsByMonth[month].map(event => (
-                  <div
-                    key={event.id}
-                    className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
-                    onClick={() => setSelectedEvent(event)}
-                  >
-                    {event.image_url && (
-                      <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
-                        <img
-                          className="w-full h-48 object-contain"
-                          src={event.image_url}
-                          alt={event.title}
-                        />
-                      </div>
-                    )}
-                    <div className="p-6 flex-grow flex flex-col">
-                      <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                      <p className="text-gray-600 mb-4">
-                        {new Date(event.event_date).toLocaleString('no-NO', {
-                          timeZone: 'Europe/Oslo',
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </p>
-                      <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
-                      {event.location && (
-                        <p className="text-gray-600 mt-auto">
-                          <span className="font-semibold">Sted:</span> {event.location}
-                        </p>
-                      )}
+                {month === 'oktober' ? (
+                  <Link to="/musikkfest" className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col">
+                    <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
+                      <img className="w-full h-48 object-contain" src="/images/logo.jpg" alt="Hovden Musikkfest" />
                     </div>
-                  </div>
-                ))}
+                    <div className="p-6 flex-grow flex flex-col">
+                      <h3 className="text-xl font-bold mb-2">Hovden Musikkfest</h3>
+                      <p className="text-gray-600 mb-4">Klikk for å se festivalprogrammet for oktober.</p>
+                    </div>
+                  </Link>
+                ) : (
+                  eventsByMonth[month].map(event => (
+                    <div
+                      key={event.id}
+                      className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
+                      onClick={() => setSelectedEvent(event)}
+                    >
+                      {event.image_url && (
+                        <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
+                          <img
+                            className="w-full h-48 object-contain"
+                            src={event.image_url}
+                            alt={event.title}
+                          />
+                        </div>
+                      )}
+                      <div className="p-6 flex-grow flex flex-col">
+                        <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                        <p className="text-gray-600 mb-4">
+                          {new Date(event.event_date).toLocaleString('no-NO', {
+                            timeZone: 'Europe/Oslo',
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                        <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
+                        {event.location && (
+                          <p className="text-gray-600 mt-auto">
+                            <span className="font-semibold">Sted:</span> {event.location}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           ))}
