@@ -350,6 +350,11 @@ function EventsPage() {
                               <span className="font-semibold">Sted:</span> {event.location}
                             </p>
                           )}
+                          {event.ticket_price != null && (
+                            <p className="text-gray-600">
+                              <span className="font-semibold">Pris:</span> {event.ticket_price} kr
+                            </p>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -387,6 +392,11 @@ function EventsPage() {
                         {event.location && (
                           <p className="text-gray-600 mt-auto">
                             <span className="font-semibold">Sted:</span> {event.location}
+                          </p>
+                        )}
+                        {event.ticket_price != null && (
+                          <p className="text-gray-600">
+                            <span className="font-semibold">Pris:</span> {event.ticket_price} kr
                           </p>
                         )}
                       </div>
