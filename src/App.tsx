@@ -377,27 +377,62 @@ function EventsPage() {
                       )}
                       <div className="p-6 flex-grow flex flex-col">
                         <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                        <p className="text-gray-600 mb-4">
-                          {new Date(event.event_date).toLocaleString('no-NO', {
-                            timeZone: 'Europe/Oslo',
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </p>
-                        <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
-                        {event.location && (
-                          <p className="text-gray-600 mt-auto">
-                            <span className="font-semibold">Sted:</span> {event.location}
-                          </p>
-                        )}
-                        {event.ticket_price != null && (
-                          <p className="text-gray-600">
-                            <span className="font-semibold">Pris:</span> {event.ticket_price} kr
-                          </p>
+                        {event.title && event.title.toLowerCase().includes('tønes') ? (
+                          <>
+                            <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
+                            <p className="text-gray-600 mb-4">
+                              {new Date(event.event_date).toLocaleString('no-NO', {
+                                timeZone: 'Europe/Oslo',
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </p>
+                            {event.location && (
+                              <p className="text-gray-600 mt-auto">
+                                <span className="font-semibold">Sted:</span> {event.location}
+                              </p>
+                            )}
+                            {event.ticket_price != null && (
+                              <p className="text-gray-600">
+                                <span className="font-semibold">Pris:</span> {event.ticket_price} kr
+                              </p>
+                            )}
+                            <Link
+                              to="/membership"
+                              className="inline-block bg-[#1d4f4d] text-white px-6 py-3 rounded-md hover:bg-[#2a6f6d] mt-4 text-center"
+                            >
+                              Bli Medlem
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <p className="text-gray-600 mb-4">
+                              {new Date(event.event_date).toLocaleString('no-NO', {
+                                timeZone: 'Europe/Oslo',
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </p>
+                            <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
+                            {event.location && (
+                              <p className="text-gray-600 mt-auto">
+                                <span className="font-semibold">Sted:</span> {event.location}
+                              </p>
+                            )}
+                            {event.ticket_price != null && (
+                              <p className="text-gray-600">
+                                <span className="font-semibold">Pris:</span> {event.ticket_price} kr
+                              </p>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>
@@ -464,7 +499,11 @@ function MembershipPage() {
           <ul className="mb-8 text-gray-700 space-y-3 text-lg flex flex-col items-center justify-center">
             <li className="flex items-center gap-3">
               <Music2 size={22} className="text-[#1d4f4d]" />
-              <span>Prioritert tilgang til billetter</span>
+              <span>Rabatterte billetter til alle våre arrangementer</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <Music2 size={22} className="text-[#1d4f4d]" />
+              <span>Førsterett på billetter til utvalgte konserter</span>
             </li>
             <li className="flex items-center gap-3">
               <Music2 size={22} className="text-[#1d4f4d]" />
@@ -472,7 +511,7 @@ function MembershipPage() {
             </li>
             <li className="flex items-center gap-3">
               <Music2 size={22} className="text-[#1d4f4d]" />
-              <span>Støtt lokal musikkultur</span>
+              <span>Mulighet til å påvirke klubbens program og utvikling</span>
             </li>
           </ul>
           {!showForm && (

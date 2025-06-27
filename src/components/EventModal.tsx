@@ -65,15 +65,24 @@ export function EventModal({ event, onClose }: EventModalProps) {
               </p>
             )}
             
-            {event.tickets_url && (
+            {event.title && event.title.toLowerCase().includes('tønes') ? (
               <a
-                href={event.tickets_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-[#1d4f4d] text-white px-6 py-3 rounded-md hover:bg-[#2a6f6d] mt-4"
+                href="/membership"
+                className="inline-block bg-[#1d4f4d] text-white px-6 py-3 rounded-md hover:bg-[#2a6f6d] mt-4 text-center"
               >
-                Kjøp Billetter
+                Bli Medlem
               </a>
+            ) : (
+              event.tickets_url && (
+                <a
+                  href={event.tickets_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-[#1d4f4d] text-white px-6 py-3 rounded-md hover:bg-[#2a6f6d] mt-4"
+                >
+                  Kjøp Billetter
+                </a>
+              )
             )}
           </div>
         </div>

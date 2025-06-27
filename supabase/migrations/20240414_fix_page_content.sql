@@ -74,17 +74,7 @@ Vi arrangerer konserter og musikalske events gjennom hele året, med fokus på v
 Bli medlem i dag og bli en del av vårt musikalske fellesskap!'),
     
     ('membership', 'main', 'Medlemskap',
-    'Som medlem i Hovden Musikklubb får du eksklusive fordeler og blir en viktig del av vårt musikalske fellesskap.
-
-Medlemsfordeler:
-- Rabatterte billetter til alle våre arrangementer
-- Førsterett på billetter til utvalgte konserter
-- Invitasjoner til medlemsarrangementer
-- Mulighet til å påvirke klubbens program og utvikling
-
-Medlemskapet koster kun kr 200,- per år.
-
-Meld deg inn i dag og bli en del av Hovdens mest spennende musikkmiljø!'),
+    'Som medlem i Hovden Musikklubb får du eksklusive fordeler og blir en viktig del av vårt musikalske fellesskap.\n\nMedlemsfordeler:\n- Rabatterte billetter til alle våre arrangementer\n- Førsterett på billetter til utvalgte konserter\n- Eksklusive medlemsarrangementer\n- Mulighet til å påvirke klubbens program og utvikling\n\nMedlemskapet koster kun kr 200,- per år.\n\nMeld deg inn i dag og bli en del av Hovdens mest spennende musikkmiljø!'),
 
     ('contact', 'main', 'Kontakt Oss',
     'Ta gjerne kontakt med oss om du har spørsmål eller ønsker å bli medlem.'),
