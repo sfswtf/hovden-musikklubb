@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 import type { Database } from '../types/supabase';
 
@@ -10,6 +10,16 @@ interface EventModalProps {
 }
 
 export function EventModal({ event, onClose }: EventModalProps) {
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -66,12 +76,24 @@ export function EventModal({ event, onClose }: EventModalProps) {
             )}
             
             {event.title && event.title.toLowerCase().includes('tønes') ? (
-              <a
-                href="/membership"
-                className="inline-block bg-[#1d4f4d] text-white px-6 py-3 rounded-md hover:bg-[#2a6f6d] mt-4 text-center"
-              >
-                Bli Medlem
-              </a>
+              <div className="flex flex-col sm:flex-row gap-4 mt-4">
+                <a
+                  href="/membership"
+                  className="inline-block bg-[#1d4f4d] text-white px-6 py-3 rounded-md hover:bg-[#2a6f6d] text-center"
+                >
+                  Bli Medlem
+                </a>
+                {event.tickets_url && (
+                  <a
+                    href={event.tickets_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-[#e6b800] text-black px-6 py-3 rounded-md hover:bg-[#ffcc00] text-center"
+                  >
+                    Kjøp Billetter
+                  </a>
+                )}
+              </div>
             ) : (
               event.tickets_url && (
                 <a
