@@ -26,6 +26,13 @@ export function EventManager() {
     fetchEvents();
   }, []);
 
+  // Phase 2: Scroll to top when editing an event
+  useEffect(() => {
+    if (editingEvent) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [editingEvent]);
+
   async function fetchEvents() {
     try {
       const { data, error } = await supabase
@@ -174,29 +181,27 @@ export function EventManager() {
               required
               value={formData.event_date ? (() => {
                 try {
+                  // Phase 1: Simplified timezone handling
+                  // Convert UTC date to local datetime-local format
                   const d = new Date(formData.event_date);
-                  // Get Oslo time parts
-                  const oslo = d.toLocaleString('sv-SE', { timeZone: 'Europe/Oslo' }).replace(' ', 'T').slice(0, 16);
-                  return oslo;
+                  // Format as YYYY-MM-DDTHH:MM for datetime-local input
+                  const year = d.getFullYear();
+                  const month = String(d.getMonth() + 1).padStart(2, '0');
+                  const day = String(d.getDate()).padStart(2, '0');
+                  const hours = String(d.getHours()).padStart(2, '0');
+                  const minutes = String(d.getMinutes()).padStart(2, '0');
+                  return `${year}-${month}-${day}T${hours}:${minutes}`;
                 } catch {
                   return '';
                 }
               })() : ''}
               onChange={e => {
-                const local = e.target.value;
-                if (local) {
-                  const [date, time] = local.split('T');
-                  const [year, month, day] = date.split('-').map(Number);
-                  const [hour, minute] = time.split(':').map(Number);
-                  // Create a Date object as if in Oslo
-                  const osloDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
-                  // Get the offset (in minutes) for Oslo at that date
-                  const temp = new Date(osloDate.toLocaleString('en-US', { timeZone: 'Europe/Oslo' }));
-                  const offset = (osloDate.getTime() - temp.getTime()) / 60000;
-                  // Adjust to true UTC
-                  const utcMillis = osloDate.getTime() + offset * 60000;
-                  const utc = new Date(utcMillis).toISOString();
-                  setFormData({ ...formData, event_date: utc });
+                // Phase 1: Simplified timezone handling
+                const localDateTime = e.target.value;
+                if (localDateTime) {
+                  // Convert local datetime to UTC ISO string
+                  const utcDate = new Date(localDateTime).toISOString();
+                  setFormData({ ...formData, event_date: utcDate });
                 } else {
                   setFormData({ ...formData, event_date: '' });
                 }
