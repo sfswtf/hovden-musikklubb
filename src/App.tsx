@@ -297,8 +297,8 @@ function EventsPage() {
               const el = document.getElementById('program-2026');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="bg-[#1d4f4d] text-white px-12 py-6 rounded-xl hover:bg-[#2a6f6d] transition-colors text-2xl font-bold shadow-lg border-4 border-[#1d4f4d]"
-            style={{ fontSize: '2.25rem', minWidth: '300px', minHeight: '80px' }}
+            className="bg-[#1d4f4d] text-white font-bold rounded-md px-6 py-3 text-2xl shadow-md hover:bg-[#2a6f6d] transition-colors w-full sm:w-auto"
+            style={{ minWidth: 'unset', minHeight: 'unset', fontSize: '1.875rem' }}
           >
             Program 2026
           </button>
