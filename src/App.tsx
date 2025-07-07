@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Link as RouterLink } from 'react-router-dom';
 import { Menu, X, Facebook, Instagram, Mail, MapPin, Music2 } from 'lucide-react';
 import { MembershipForm } from './components/MembershipForm';
 import { AdminDashboard } from './components/AdminDashboard';
@@ -270,6 +270,9 @@ function EventsPage() {
     return dateA.getTime() - dateB.getTime();
   });
 
+  // Find the first event in 2026
+  const first2026Event = events.find(e => new Date(e.event_date).getFullYear() === 2026);
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -286,37 +289,98 @@ function EventsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Program 2025 Banner Image */}
       <img src="/images/program2025.png" alt="Program 2025" className="w-full max-w-4xl mx-auto rounded-lg mb-8 object-cover" style={{height: 'auto'}} />
-      <h1 className="text-3xl font-bold mb-8">Program 2025</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+        <h1 className="text-3xl font-bold">Program 2025</h1>
+        {first2026Event && (
+          <button
+            onClick={() => {
+              const el = document.getElementById('program-2026');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="bg-[#1d4f4d] text-white px-12 py-6 rounded-xl hover:bg-[#2a6f6d] transition-colors text-2xl font-bold shadow-lg border-4 border-[#1d4f4d]"
+            style={{ fontSize: '2.25rem', minWidth: '300px', minHeight: '80px' }}
+          >
+            Program 2026
+          </button>
+        )}
+      </div>
       {events.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
           Ingen arrangementer planlagt for øyeblikket.
         </div>
       ) : (
         <div className="space-y-12">
-          {sortedMonths.map(month => (
-            <div key={month} className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 border-b-2 border-[#1d4f4d] pb-2">
-                {month}
-              </h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {month === 'oktober' ? (
-                  <>
-                    <Link to="/musikkfest" className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col">
-                      <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
-                        <img className="w-full h-48 object-contain" src="/images/logo.jpg" alt="Hovden Musikkfest" />
-                      </div>
-                      <div className="p-6 flex-grow flex flex-col">
-                        <h3 className="text-xl font-bold mb-2">Hovden Musikkfest</h3>
-                        <p className="text-gray-600 mb-2">Klikk for å se festivalprogrammet</p>
-                        <ul className="text-gray-700 list-disc list-inside space-y-1">
-                          <li>Yngve Jordalen</li>
-                          <li>Valkyrien Allstars</li>
-                          <li>Center of the Universe</li>
-                        </ul>
-                      </div>
-                    </Link>
-                    {/* Show Grendedag as a normal event card in October */}
-                    {eventsByMonth[month].filter(event => event.title === 'Grendedag').map(event => (
+          {sortedMonths.map(month => {
+            // Find if this month contains the first 2026 event
+            const is2026 = eventsByMonth[month]?.some(e => new Date(e.event_date).getFullYear() === 2026);
+            return (
+              <div key={month} className="space-y-6" {...(is2026 ? { id: 'program-2026' } : {})}>
+                <h2 className="text-2xl font-bold text-gray-900 border-b-2 border-[#1d4f4d] pb-2">
+                  {month}{is2026 ? ' (2026)' : ''}
+                </h2>
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {month === 'oktober' ? (
+                    <>
+                      <Link to="/musikkfest" className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col">
+                        <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
+                          <img className="w-full h-48 object-contain" src="/images/logo.jpg" alt="Hovden Musikkfest" />
+                        </div>
+                        <div className="p-6 flex-grow flex flex-col">
+                          <h3 className="text-xl font-bold mb-2">Hovden Musikkfest</h3>
+                          <p className="text-gray-600 mb-2">Klikk for å se festivalprogrammet</p>
+                          <ul className="text-gray-700 list-disc list-inside space-y-1">
+                            <li>Yngve Jordalen</li>
+                            <li>Valkyrien Allstars</li>
+                            <li>Center of the Universe</li>
+                          </ul>
+                        </div>
+                      </Link>
+                      {/* Show Grendedag as a normal event card in October */}
+                      {eventsByMonth[month].filter(event => event.title === 'Grendedag').map(event => (
+                        <div
+                          key={event.id}
+                          className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
+                          onClick={() => setSelectedEvent(event)}
+                        >
+                          {event.image_url && (
+                            <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
+                              <img
+                                className="w-full h-48 object-contain"
+                                src={event.image_url}
+                                alt={event.title}
+                              />
+                            </div>
+                          )}
+                          <div className="p-6 flex-grow flex flex-col">
+                            <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                            <p className="text-gray-600 mb-4">
+                              {new Date(event.event_date).toLocaleString('no-NO', {
+                                timeZone: 'Europe/Oslo',
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </p>
+                            <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
+                            {event.location && (
+                              <p className="text-gray-600 mt-auto">
+                                <span className="font-semibold">Sted:</span> {event.location}
+                              </p>
+                            )}
+                            {typeof event.ticket_price === 'number' && !isNaN(event.ticket_price) ? (
+                              <p className="text-gray-600">
+                                <span className="font-semibold">Pris:</span> {event.ticket_price} kr
+                              </p>
+                            ) : null}
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  ) :
+                    eventsByMonth[month].map(event => (
                       <div
                         key={event.id}
                         className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
@@ -333,126 +397,102 @@ function EventsPage() {
                         )}
                         <div className="p-6 flex-grow flex flex-col">
                           <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                          <p className="text-gray-600 mb-4">
-                            {new Date(event.event_date).toLocaleString('no-NO', {
-                              timeZone: 'Europe/Oslo',
-                              weekday: 'long',
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </p>
-                          <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
-                          {event.location && (
-                            <p className="text-gray-600 mt-auto">
-                              <span className="font-semibold">Sted:</span> {event.location}
-                            </p>
-                          )}
-                          {event.ticket_price != null && (
-                            <p className="text-gray-600">
-                              <span className="font-semibold">Pris:</span> {event.ticket_price} kr
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </>
-                ) :
-                  eventsByMonth[month].map(event => (
-                    <div
-                      key={event.id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
-                      onClick={() => setSelectedEvent(event)}
-                    >
-                      {event.image_url && (
-                        <div className="w-full h-48 bg-stone-100 flex items-center justify-center flex-shrink-0">
-                          <img
-                            className="w-full h-48 object-contain"
-                            src={event.image_url}
-                            alt={event.title}
-                          />
-                        </div>
-                      )}
-                      <div className="p-6 flex-grow flex flex-col">
-                        <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                        {event.title && event.title.toLowerCase().includes('tønes') ? (
-                          <>
-                            <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
-                            <p className="text-gray-600 mb-4">
-                              {new Date(event.event_date).toLocaleString('no-NO', {
-                                timeZone: 'Europe/Oslo',
-                                weekday: 'long',
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </p>
-                            {event.location && (
-                              <p className="text-gray-600 mt-auto">
-                                <span className="font-semibold">Sted:</span> {event.location}
+                          {event.title && event.title.toLowerCase().includes('tønes') ? (
+                            <>
+                              <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
+                              <p className="text-gray-600 mb-4">
+                                {new Date(event.event_date).toLocaleString('no-NO', {
+                                  timeZone: 'Europe/Oslo',
+                                  weekday: 'long',
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
                               </p>
-                            )}
-                            {event.ticket_price != null && (
-                              <p className="text-gray-600">
-                                <span className="font-semibold">Pris:</span> {event.ticket_price} kr
-                              </p>
-                            )}
-                            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                              <Link
-                                to="/membership"
-                                className="inline-block bg-[#1d4f4d] text-white px-6 py-3 rounded-md hover:bg-[#2a6f6d] text-center"
-                              >
-                                Bli Medlem
-                              </Link>
-                              {event.tickets_url && (
+                              {event.location && (
+                                <p className="text-gray-600 mt-auto">
+                                  <span className="font-semibold">Sted:</span> {event.location}
+                                </p>
+                              )}
+                              {typeof event.ticket_price === 'number' && !isNaN(event.ticket_price) ? (
+                                <p className="text-gray-600">
+                                  <span className="font-semibold">Pris:</span> {event.ticket_price} kr
+                                </p>
+                              ) : null}
+                              <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center items-center w-full">
                                 <a
-                                  href={event.tickets_url}
+                                  href={event.tickets_url || '#'}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-block bg-[#e6b800] text-black px-6 py-3 rounded-md hover:bg-[#ffcc00] text-center"
+                                  className="inline-block bg-[#e6b800] text-black font-bold px-10 py-4 rounded-lg hover:bg-[#ffcc00] text-xl transition-colors w-full sm:w-auto text-center"
+                                  style={{ maxWidth: 320 }}
                                 >
                                   Kjøp Billetter
                                 </a>
+                                <a
+                                  href="/membership"
+                                  className="inline-block bg-[#1d4f4d] text-white font-bold px-10 py-4 rounded-lg hover:bg-[#2a6f6d] text-xl transition-colors w-full sm:w-auto text-center"
+                                  style={{ maxWidth: 320 }}
+                                >
+                                  Bli Medlem
+                                </a>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <p className="text-gray-600 mb-4">
+                                {new Date(event.event_date).toLocaleString('no-NO', {
+                                  timeZone: 'Europe/Oslo',
+                                  weekday: 'long',
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </p>
+                              <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
+                              {event.location && (
+                                <p className="text-gray-600 mt-auto">
+                                  <span className="font-semibold">Sted:</span> {event.location}
+                                </p>
                               )}
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <p className="text-gray-600 mb-4">
-                              {new Date(event.event_date).toLocaleString('no-NO', {
-                                timeZone: 'Europe/Oslo',
-                                weekday: 'long',
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </p>
-                            <p className="text-gray-700 line-clamp-3 mb-4">{event.description}</p>
-                            {event.location && (
-                              <p className="text-gray-600 mt-auto">
-                                <span className="font-semibold">Sted:</span> {event.location}
-                              </p>
-                            )}
-                            {event.ticket_price != null && (
-                              <p className="text-gray-600">
-                                <span className="font-semibold">Pris:</span> {event.ticket_price} kr
-                              </p>
-                            )}
-                          </>
-                        )}
+                              {typeof event.ticket_price === 'number' && !isNaN(event.ticket_price) ? (
+                                <p className="text-gray-600">
+                                  <span className="font-semibold">Pris:</span> {event.ticket_price} kr
+                                </p>
+                              ) : null}
+                              <div className="flex flex-col gap-2 mt-4">
+                                {/* Existing Kjøp billett button if present */}
+                                {event.tickets_url && (
+                                  <a
+                                    href={event.tickets_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block bg-[#e6b800] text-black font-bold px-6 py-3 rounded-md hover:bg-[#ffcc00] text-lg transition-colors text-center"
+                                  >
+                                    Kjøp billett
+                                  </a>
+                                )}
+                                <a
+                                  href="/membership"
+                                  className="inline-block bg-[#1d4f4d] text-white font-bold px-6 py-3 rounded-md hover:bg-[#2a6f6d] text-lg transition-colors text-center"
+                                >
+                                  Bli Medlem
+                                </a>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))
-                }
+                    ))
+                  }
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
       {selectedEvent && (
@@ -472,13 +512,13 @@ function AboutPage() {
         <img
           src="/images/logo.jpg"
           alt="Hovden Musikklubb Logo"
-          className="w-64 h-64 mx-auto mb-8 rounded-full"
+          className="w-[32rem] h-[32rem] mx-auto mb-8 rounded-full"
           style={{
             filter: 'contrast(1.1)'
           }}
         />
         <h1 className="text-3xl font-bold mb-8">Om Oss</h1>
-        <div className="prose max-w-none text-left">
+        <div className="prose max-w-none text-left mx-auto" style={{ fontSize: '1.25rem', lineHeight: '2rem' }}>
           <p className="mb-6">
             Hovden Musikklubb ble stiftet i år av en gjeng med et felles ønske. Å skape unike musikalske opplevelser. Først og fremst ønsker vi å skape et tilbud for alle som elsker musikk, som tør å bli utfordret og har et hjerte for Hovden. Vi ønsker å dyrke det særegne fellesskapet som alltid har eksistert på Hovden, og som er en av grunnene til at vi velger å bo her oppe i fjellheimen. Vi booker alle sjangere, og er forankret i Setesdalens rike musikalske tradisjon.
           </p>
@@ -486,8 +526,17 @@ function AboutPage() {
             Som et godt måltid, trenger en bra konsert gode ingredienser. Et lyttende publikum, unike omgivelser, god lyd og ikke minst musikere som har noe på hjertet. Vi ønsker å skape et rom der det er godt å være for både utøvere og de som lytter. Et rom der tankene kan vandre, beina danse og musikalsk kvalitet og fellesskap står fjellstøtt i en ellers urolig verden. Et rom fritt for mobiltelefoner og likes, der det er trygt å gi seg hen og leve i nuet.
           </p>
           <p className="mb-6">
-            Hovden Musikkklubb drives av medlemmene, for medlemmene. Vi arrangerer noen få kommersielle konserter i løpet av året, som finansierer aktiviteten resten av året. Som medlem får du være med på alt som skjer, både som publikum og frivillig hvis du ønsker det. Alle midlene i klubben går til å skape unike opplevelser for medlemmene, sosialt og musikalsk. Intimkonserter, korkveld på pub eller hodelykt-konsert på en fjelltopp i oktober? Det er i grunn kun fantasien som setter grenser.
+            Hovden Musikklubb drives av medlemmene, for medlemmene. Vi arrangerer noen få kommersielle konserter i løpet av året, som finansierer aktiviteten resten av året. Som medlem får du være med på alt som skjer, både som publikum og frivillig hvis du ønsker det. Alle midlene i klubben går til å skape unike opplevelser for medlemmene, sosialt og musikalsk. Intimkonserter, korkveld på pub eller hodelykt-konsert på en fjelltopp i oktober? Det er i grunn kun fantasien som setter grenser.
           </p>
+        </div>
+        {/* Big centered Bli Medlem button below the text */}
+        <div className="flex justify-center mt-8">
+          <a
+            href="/membership"
+            className="inline-block bg-[#1d4f4d] text-white text-2xl font-bold px-10 py-5 rounded-lg shadow-lg hover:bg-[#2a6f6d] transition-colors"
+          >
+            Bli Medlem
+          </a>
         </div>
       </div>
     </div>
@@ -495,7 +544,6 @@ function AboutPage() {
 }
 
 function MembershipPage() {
-  const [showForm, setShowForm] = useState(false);
   return (
     <AnimatedSection>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col items-center justify-center">
@@ -526,20 +574,10 @@ function MembershipPage() {
               <span>Mulighet til å påvirke klubbens program og utvikling</span>
             </li>
           </ul>
-          {!showForm && (
-            <button 
-              onClick={() => setShowForm(true)}
-              className="bg-[#1d4f4d] text-white py-4 px-8 text-lg rounded-lg hover:bg-[#1d4f4d] transform hover:scale-105 transition-transform w-full max-w-xs mx-auto mb-2"
-            >
-              Bli Medlem Nå
-            </button>
-          )}
-          {/* Membership Form */}
-          {showForm && (
-            <div className="w-full max-w-2xl mx-auto">
-              <MembershipForm />
-            </div>
-          )}
+          {/* Membership Form always visible */}
+          <div className="w-full max-w-2xl mx-auto">
+            <MembershipForm />
+          </div>
         </AnimatedCard>
       </div>
     </AnimatedSection>

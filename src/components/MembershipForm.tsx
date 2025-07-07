@@ -34,9 +34,11 @@ export function MembershipForm() {
     motivation: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
     await submitMembershipForm(formData);
     setFormData({
       name: '',
@@ -47,12 +49,14 @@ export function MembershipForm() {
       motivation: ''
     });
     setSubmitted(true);
+    window.location.href = 'https://event.checkin.no/139486/medlemskap-2025?fbclid=IwY2xjawLXSCRleHRuA2FlbQIxMABicmlkETFEbUFTOWNCZm9xSG9BOTlFAR5ngijSdRJ2Kfi2XKvhspY8HmCkfC0VMFcmgS2L1bf0TxfXalIxIw6o4tGhkw_aem_RvErzvAQ4nDpV1uu_VUUAA';
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Medlemskapssøknad</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Innmeldingskjema</h2>
+        <p className="mb-4 text-center text-gray-700">Fyll ut skjemaet for å bli medlem. Etter innsending blir du sendt videre til betaling.</p>
         {submitted && (
           <div className="flex items-center gap-3 bg-emerald-600 rounded-xl shadow p-4 mb-6 border border-emerald-700 justify-center">
             <CheckCircle className="text-white" size={32} />
@@ -129,9 +133,13 @@ export function MembershipForm() {
         </div>
         <button
           type="submit"
-          className="w-full mt-6 bg-emerald-600 text-white py-4 px-4 rounded hover:bg-emerald-700 transition-colors text-lg"
+          className="w-full mt-6 bg-emerald-600 text-white py-4 px-4 rounded hover:bg-emerald-700 transition-colors text-lg flex items-center justify-center"
+          disabled={submitting}
         >
-          Send Søknad
+          {submitting ? (
+            <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+          ) : null}
+          Fullfør innmelding
         </button>
       </div>
     </form>

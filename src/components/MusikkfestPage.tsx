@@ -63,6 +63,22 @@ export function MusikkfestPage() {
             Velkommen til årets store musikkbegivenhet på Hovden! Hovden Musikkfest samler noen av Norges mest spennende artister og byr på et variert program for både store og små. Opplev konserter, lokale matopplevelser og ekte festivalstemning i hjertet av fjellheimen.
           </p>
         </div>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-8">
+          <a
+            href="https://checkout.ebillett.no/255/events/41839/purchase/setup"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[#e6b800] text-black text-2xl font-bold px-10 py-5 rounded-lg shadow-lg hover:bg-[#ffcc00] transition-colors"
+          >
+            Kjøp billett
+          </a>
+          <a
+            href="/membership"
+            className="inline-block bg-[#1d4f4d] text-white text-2xl font-bold px-10 py-5 rounded-lg shadow-lg hover:bg-[#2a6f6d] transition-colors"
+          >
+            Bli Medlem
+          </a>
+        </div>
         {loading ? (
           <div className="text-center py-12 text-gray-500">Laster program...</div>
         ) : events.length === 0 ? (
@@ -90,15 +106,27 @@ export function MusikkfestPage() {
                     </p>
                     <p className="text-gray-700 line-clamp-3 mb-2">{event.description?.split('\n')[0]}</p>
                     <p className="text-gray-600 mb-2"><span className="font-semibold">Sted:</span> {event.location}</p>
-                    <p className="text-gray-600 mb-2"><span className="font-semibold">Pris:</span> {event.ticket_price} kr</p>
-                    {event.tickets_url && (
+                    {typeof event.ticket_price === 'number' && !isNaN(event.ticket_price) ? (
+                      <p className="text-gray-600 mb-2"><span className="font-semibold">Pris:</span> {event.ticket_price} kr</p>
+                    ) : null}
+                    <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center items-center w-full">
                       <a
-                        href={event.tickets_url}
-                        className="inline-block bg-[#1d4f4d] text-white px-4 py-2 rounded-md hover:bg-[#2a6f6d] mt-2"
+                        href={event.tickets_url || 'https://checkout.ebillett.no/255/events/41839/purchase/setup'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block bg-[#e6b800] text-black font-bold px-8 py-3 rounded-lg hover:bg-[#ffcc00] text-lg transition-colors w-full sm:w-auto text-center"
+                        style={{ maxWidth: 320 }}
                       >
                         Kjøp billett
                       </a>
-                    )}
+                      <a
+                        href="/membership"
+                        className="inline-block bg-[#1d4f4d] text-white font-bold px-8 py-3 rounded-lg hover:bg-[#2a6f6d] text-lg transition-colors w-full sm:w-auto text-center"
+                        style={{ maxWidth: 320 }}
+                      >
+                        Bli Medlem
+                      </a>
+                    </div>
                   </div>
                 </div>
               </AnimatedCard>
